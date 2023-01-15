@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="C:\Users\nazaq\source\repos\Visual Studio 2022\KnockoutDemoProject\KnockoutDemoProject\jquery-3.6.1.min.js"></script>
+    <script src="C:\Users\nazaq\source\repos\Visual Studio 2022\KnockoutDemoProject\KnockoutDemoProject\knockout-3.5.1.js"></script>
+
+    <style>
+        .selected {
+            color: red;
+        }
+    </style>
+
+</head>
+<body>
+
+    <table data-bind="foreach:Accounts">
+        <tr>
+            <td data-bind="text:Id"></td>
+            <td data-bind="text:Name"></td>
+            <td data-bind="text:Balance"></td>
+            <td>
+                <span data-bind="component: { name: 'transaction-component', params: {AccountHoldersName: Name, Amounts: Transactions}}"></span>
+            </td>
+        </tr>
+    </table>
+
+    <script>
+
+        function Account(id, name, balance, trans) {
+            this.Id = id;
+            this.Name = name;
+            this.Balance = ko.observable(balance);
+            this.Transactions = trans;
+        }
+
+        var myAccountViewModel = new function () {
+
+            this.Accounts = ko.observableArray([
+                new Account(1, "A1", 1000, [100,-50,1000,-25]),
+                new Account(2, "A2", 20000, [100,-24]),
+                new Account(3, "A3", 300, [123,-934,234]),
+                new Account(4, "A4", 40000, [1999,3456,-234,199])
+            ]);
+
+            this.TemplateName = function (account) {
+                if (account.Balance() < 1500) {
+                    return "low-account-template";
+                }
+                else {
+                    return "high-account-template";
+                }
+            };
+
+        };
+
+        function TransactionViewModel(params) {
+            this.AccountHoldersName = params.AccountHoldersName;
+            this.Amounts = params.Amounts;
+        }
+
+        ko.components.register('transaction-component', {
+            viewModel: TransactionViewModel,
+            template: "<ul data-bind='foreach:Amounts'> \
+                        <li><span data-bind='text:$parent.AccountHoldersName'></span> deposited £<span data-bind='text:$data'></span></li> \
+                       </ul>"
+        })
+
+        ko.applyBindings(myAccountViewModel);
+
+    </script>
+
+</body>
+</html>

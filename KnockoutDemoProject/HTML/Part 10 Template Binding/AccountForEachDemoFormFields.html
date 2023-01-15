@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="C:\Users\nazaq\source\repos\Visual Studio 2022\KnockoutDemoProject\KnockoutDemoProject\jquery-3.6.1.min.js"></script>
+    <script src="C:\Users\nazaq\source\repos\Visual Studio 2022\KnockoutDemoProject\KnockoutDemoProject\knockout-3.5.1.js"></script>
+
+    <style>
+        .selected {
+            color: red;
+        }
+    </style>
+
+</head>
+<body>
+
+    <table data-bind="template: {name:TemplateName, foreach:Accounts, as: 'acc'}">
+    </table>
+
+    <script type="text/html" id="high-account-template">
+        <tr style="color:green">
+            <td data-bind="text:acc.Id"></td>
+            <td data-bind="text:acc.Name"></td>
+            <td data-bind="text:acc.Balance"></td>
+        </tr>
+    </script>
+
+    <script type="text/html" id="low-account-template">
+        <tr style="color:red">
+            <td data-bind="text:acc.Id"></td>
+            <td data-bind="text:acc.Name"></td>
+            <td data-bind="text:acc.Balance"></td>
+        </tr>
+    </script>
+
+    <script>
+
+        function Account(id, name, balance, deposits) {
+            this.Id = id;
+            this.Name = name;
+            this.Balance = ko.observable(balance);
+        }
+
+        var myAccountViewModel = new function () {
+
+            this.Accounts = ko.observableArray([
+                new Account(1, "A1", 1000),
+                new Account(2, "A2", 20000),
+                new Account(3, "A3", 300),
+                new Account(4, "A4", 40000)
+            ]);
+
+            this.TemplateName = function (account) {
+                if (account.Balance() < 1500) {
+                    return "low-account-template";
+                }
+                else {
+                    return "high-account-template";
+                }
+            };
+
+        };
+
+        ko.applyBindings(myAccountViewModel);
+
+    </script>
+
+</body>
+</html>

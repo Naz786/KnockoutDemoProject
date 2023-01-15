@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="C:\Users\nazaq\source\repos\Visual Studio 2022\KnockoutDemoProject\KnockoutDemoProject\jquery-3.6.1.min.js"></script>
+    <script src="C:\Users\nazaq\source\repos\Visual Studio 2022\KnockoutDemoProject\KnockoutDemoProject\knockout-3.5.1.js"></script>
+    <style>
+       .redColour
+        {
+            color: red;
+            border: solid 5px yellow;
+        }
+    </style>
+</head>
+<body>
+
+    <input type="range" name="txtNumber" data-bind="value: Number" min="1" max="100" />
+    This number is
+    <span data-bind="visible: IsEvenNumber()">Even</span>
+    <span data-bind="visible: IsEvenNumber() == false">Odd</span>
+    <br />
+
+    The number selected is: <span data-bind="text: Number"></span>
+    <br />
+
+    Containerless text output: <!--ko text: Number--><!--/ko--><br />
+    Formatted text Number: <div data-bind="text:FormattedNumber()"></div>
+    Formatted html Number: <div data-bind="html:FormattedNumber(), style:{color: DisplayColour()}"></div>
+    <div data-bind="style:{color: DisplayColour(), fontWeight: IsEvenNumber()?'bold':''}">This is demo text.</div>
+
+    <div data-bind="css: {redColour: IsEvenNumber()}">This is red for even number.</div>
+
+    <br />
+
+    <a data-bind="attr: {href: Urls()[Number() % 2]}">Click Here</a>
+
+    <script>
+        var myViewModel = function () {
+            this.Number = ko.observable(1);
+
+            this.IsEvenNumber = ko.computed(function () {
+                return this.Number() % 2 == 0;
+            }, this);
+
+            this.FormattedNumber = ko.computed(function () {
+                return "<b>" + this.Number() + "</b>";
+            }, this);
+
+            this.DisplayColour = ko.computed(function() {
+                if (this.Number() % 2 ==0) {
+                    return 'red';
+                }
+                else {
+                    return 'Green';
+                }
+            }, this);
+
+            this.Urls = ko.observableArray(['http://www.red.com', 'http://www.green.com']);
+        }
+
+        ko.applyBindings(myViewModel);
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="C:\Users\nazaq\source\repos\Visual Studio 2022\KnockoutDemoProject\KnockoutDemoProject\jquery-3.6.1.min.js"></script>
+    <script src="C:\Users\nazaq\source\repos\Visual Studio 2022\KnockoutDemoProject\KnockoutDemoProject\knockout-3.5.1.js"></script>
+</head>
+<body>
+
+    <div data-bind="component:{
+            name: 'login-component',
+            params: {
+                UserName:'u1',
+                Password: 'p1'
+            }
+         }">
+    </div> 
+
+    <hr />
+
+    <login-component params="UserName:'u1', Password:'p1'"></login-component>
+
+    <script>
+        function LoginComponentViewModel(params) {
+            this.UserName = params.UserName;
+            this.Password = params.Password;
+        }
+
+        ko.components.register('login-component', {
+            viewModel: LoginComponentViewModel,
+            template: 'UserName: <input type="text" name="txtUserName" data-bind="value: UserName" /> <br /> \
+                        Password: <input type="text" name="txtPassword" data-bind="value: Password" /> <br />'
+        });
+
+        ko.applyBindings();
+
+    </script>
+
+</body>
+</html>

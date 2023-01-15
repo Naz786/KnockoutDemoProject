@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="C:\Users\nazaq\source\repos\Visual Studio 2022\KnockoutDemoProject\KnockoutDemoProject\jquery-3.6.1.min.js"></script>
+    <script src="C:\Users\nazaq\source\repos\Visual Studio 2022\KnockoutDemoProject\KnockoutDemoProject\knockout-3.5.1.js"></script>
+</head>
+<body>
+
+    <table>
+        <thead>
+            <tr>
+                <td>S.No.</td>
+                <td>Id</td>
+                <td>Name</td>
+                <td>Balance</td>
+            </tr>
+        </thead>
+
+        <tbody data-bind="foreach: {data: Accounts, as: 'Account'}">
+            <tr>
+                <td data-bind="text:(($index()+1) + '/' + $parent.Count())"></td>
+                <td data-bind="text:Account.Id"></td>
+                <td data-bind="text:Account.Name"></td>
+                <td data-bind="text:Account.Balance"></td>
+                <td>
+                    <ul data-bind="foreach: {data: Deposits, as: 'Amount'}">
+                        <li data-bind="text:(Account.Name + ' Deposited ' + Amount + ' ' + $parents[1].Count())"></li> 
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+
+    <script>
+
+        function Account(id, name, balance, deposits)
+        {
+            this.Id = id;
+            this.Name = name;
+            this.Balance = balance;
+            this.Deposits = deposits; 
+        }
+
+        var myAccountViewModel = new function ()
+        {
+            this.Accounts = ko.observableArray([
+                new Account(1, "A1", 10000, [1000,2000,30050]),
+                new Account(1, "A2", 20000, [15000, 25000, 3000]),
+                new Account(1, "A3", 30000, [1000, 2000, 305200]),
+                new Account(1, "A4", 40000, [15000, 42000, 3000])
+            ])
+
+            this.Count = ko.computed(function () {
+                return this.Accounts().length;
+            }, this)
+        };
+
+
+        ko.applyBindings(myAccountViewModel);
+
+    </script>
+
+</body>
+</html>

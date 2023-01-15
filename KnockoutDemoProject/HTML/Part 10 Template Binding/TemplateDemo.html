@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="C:\Users\nazaq\source\repos\Visual Studio 2022\KnockoutDemoProject\KnockoutDemoProject\jquery-3.6.1.min.js"></script>
+    <script src="C:\Users\nazaq\source\repos\Visual Studio 2022\KnockoutDemoProject\KnockoutDemoProject\knockout-3.5.1.js"></script>
+</head>
+
+<body>
+
+    Name: <span data-bind="text:Name"></span><hr />
+    Residence Address:
+    <div data-bind="template: {name: 'address-template', data: ResidenceAddress}"></div>
+    <hr />
+    Office Address:
+    <div data-bind="template: {name: 'address-template', data: OfficeAddress, if: (OfficeAddress() != null)}"></div>
+
+    <script id="address-template" type="text/html">
+        Street:
+        <span data-bind="text: Street"></span>
+        <br />
+        City:
+        <span data-bind="text: City"></span>
+        <br />
+        State:
+        <span data-bind="text: State"></span>
+
+    </script>
+
+    <script type="text/javascript">
+
+        function Address(street, city, state) {
+            this.Street = street;
+            this.City = city;
+            this.State = state;
+        }
+
+        function PersonViewModel() {
+            this.Name = ko.observable("Abcd");
+            this.ResidenceAddress = ko.observable(new Address("RStreet", "RCity", "RState"));
+            this.OfficeAddress = ko.observable(null); // new Address("OStreet", "OCity", "OState");
+
+        }
+
+        var personViewModel = new PersonViewModel();
+
+        ko.applyBindings(personViewModel);
+
+    </script>
+
+
+</body>
+</html>

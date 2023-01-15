@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="C:\Users\nazaq\source\repos\Visual Studio 2022\KnockoutDemoProject\KnockoutDemoProject\jquery-3.6.1.min.js"></script>
+    <script src="C:\Users\nazaq\source\repos\Visual Studio 2022\KnockoutDemoProject\KnockoutDemoProject\knockout-3.5.1.js"></script>
+</head>
+<body>
+
+    <table data-bind="foreach:Accounts">
+        <tr data-bind="displayStatus:Status, colors:['red', 'green']">
+            <td data-bind="text:Id"></td>
+            <td data-bind="text:Name"></td>
+            <td data-bind="text:Balance"></td>
+            <td><select data-bind="options:$parent.AllStatus, value:Status"></select></td>
+        </tr>
+    </table>
+
+    <script>
+
+        function Account(id, name, balance, status) {
+            this.Id = id;
+            this.Name = name;
+            this.Balance = ko.observable(balance);
+            this.Status = ko.observable(status);
+        }
+
+        var myAccountViewModel = new function () {
+
+            this.AllStatus = ['Active', 'Inactive', 'Closed'];
+            this.Accounts = ko.observableArray([
+                new Account(1, "A1", 1000, 'Active'),
+                new Account(2, "A2", 20000, 'Inactive'),
+                new Account(3, "A3", 300, 'Closed'),
+                new Account(4, "A4", 40000, 'Active'),
+                new Account(4, "A5", 45000, 'Inactive'),
+                new Account(4, "A6", 7000, 'Closed'),
+                new Account(4, "A7", 1005000, 'Active')                
+            ]);
+
+        };
+
+        ko.bindingHandlers.displayStatus = {
+            init: function (element, valueAccessor, allBindings, viewModel, bindingContext)
+            {
+                alert('init'); //only runs once
+            },
+            update: function (element, valueAccessor, allBindings, viewModel, bindingContext)
+            {
+                alert('update'); // runs the first time and on every subsequent change/update
+
+                var value = ko.unwrap(valueAccessor());
+
+                var activeColor = 'green';
+                var inactiveColor = 'red';
+
+                if (allBindings.has('colors'))
+                {
+                    var colors = allBindings.get('colors');
+                    activeColor = colors[1];
+                    inactiveColor = colors[0];
+                }
+
+                switch (value.toLowerCase()) {
+                    case "inactive":
+                        element.style['color'] = inactiveColor
+                        element.style['text-decoration'] = 'none'
+                        break;
+                    case "active":
+                        element.style['color'] = activeColor
+                        element.style['text-decoration'] = 'none'
+                        break;
+                    case "closed":
+                        element.style['color'] = 'black'
+                        element.style['text-decoration'] = 'line-through'
+                        break;
+                    default:
+                        throw "Invalid Status"
+                        break;
+                }
+            }
+        }
+
+        ko.applyBindings(myAccountViewModel);
+
+    </script>
+
+</body>
+</html>

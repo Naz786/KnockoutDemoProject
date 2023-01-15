@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="C:\Users\nazaq\source\repos\Visual Studio 2022\KnockoutDemoProject\KnockoutDemoProject\jquery-3.6.1.min.js"></script>
+    <script src="C:\Users\nazaq\source\repos\Visual Studio 2022\KnockoutDemoProject\KnockoutDemoProject\knockout-3.5.1.js"></script>
+
+</head>
+<body>
+
+    Show/Hide <input type="checkbox" name="name" data-bind="checked: ShowHideSection" />
+    <div id="div1" data-bind="if: ShowHideSection">
+        This is if block...
+    </div>
+    <button onclick="alert(document.getElementById('div1').innerHTML)">alert if binding</button>
+
+    <div id="div2" data-bind="visible: ShowHideSection">
+        This is visible block2...
+    </div>
+    <button onclick="alert(document.getElementById('div2').innerHTML)">alert visible binding</button>
+
+
+    <div>
+        <ul>
+            <li>This item will always appear</li>
+            <!--ko if: ShowHideSection-->
+            <li>I want to make this item present/absernt dynamically.</li>
+            <!--/ko-->
+        </ul>
+    </div>
+    <hr />
+    <div>
+        City: <span data-bind="text:City"></span><br />
+
+        <span data-bind="with: Phone">
+            Office Phone: <span data-bind="text:Office"></span><br />
+            Home Phone: <span data-bind="text: Home"></span><br />
+        </span>
+    </div>
+
+    <hr />
+    <ul data-bind="foreach:Color">
+        <li data-bind="text:$data"></li>
+    </ul>
+
+    <script>
+        var myViewModel = function () {
+
+            this.City = ko.observable("Mumbai");
+            this.Phone = { Home: 123456, Office: 999999 };
+
+            this.ShowHideSection = ko.observable(true);
+
+            this.Color = ko.observable(["red", "green", "orange", "blue", "pink", "black"]);
+
+        };
+
+        ko.applyBindings(myViewModel);
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="C:\Users\nazaq\source\repos\Visual Studio 2022\KnockoutDemoProject\KnockoutDemoProject\jquery-3.6.1.min.js"></script>
+    <script src="C:\Users\nazaq\source\repos\Visual Studio 2022\KnockoutDemoProject\KnockoutDemoProject\knockout-3.5.1.js"></script>
+
+    <style>
+        .selected {
+            color: red;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+
+            $(".btn-delete-account").click(function () {
+            //$(document).on("click", ".btn-delete-account", function () {
+                var acccount = ko.dataFor(this);
+                var context = ko.contextFor(this);
+                alert(context.$parent.Accounts().length);
+                myAccountViewModel.Accounts.remove(acccount);
+                alert(context.$parent.Accounts().length);
+
+            });
+        });
+    </script>
+
+</head>
+<body>
+
+    <table>
+        <thead>
+            <tr>
+                <td>S.No.</td>
+                <td>Id</td>
+                <td>Name</td>
+                <td>Balance</td>
+            </tr>
+        </thead>
+
+        <tbody data-bind="foreach: {data: Accounts, as: 'Account'}">
+            <tr style="cursor:pointer" data-bind="click: $parent.SelectAccount, clickBubble:false, css: {selected: (Account.Id ==
+                ($parent.SelectedAccount() == null?-1:$parent.SelectedAccount().Id))}">
+                <td data-bind="text:(($index()+1) + '/' + $parent.Count())"></td>
+                <td data-bind="text:Account.Id"></td>
+                <td data-bind="text:Account.Name"></td>
+                <td data-bind="text:Account.Balance"></td>
+                <td><button data-bind="click: $parent.SelectAccount, clickBubble:false">Select</button></td>
+                <td><button data-bind="click: $parent.DeleteAccount, clickBubble:false">Delete</button></td>
+                <td><button class="btn-delete-account">Delete (unobtrusive)</button></td>
+            </tr>
+        </tbody>
+
+    </table>
+    <input type="text" data-bind="value:AmountToTransact" />
+    <button data-bind="click: Deposit, enable: SelectedAccount() != null">Deposit</button>
+    <button data-bind="click: function(data) { Withdraw(500) }, enable: SelectedAccount() != null">Withdraw</button> 
+
+    <script>
+
+        function Account(id, name, balance, deposits) {
+            this.Id = id;
+            this.Name = name;
+            this.Balance = ko.observable(balance);
+            this.Deposits = deposits;
+        }
+
+        var myAccountViewModel = new function () {
+            var current = this;
+            this.SelectedAccount = ko.observable(null);
+
+            this.Accounts = ko.observableArray([
+                new Account(1, "A1", 10000),
+                new Account(2, "A2", 20000),
+                new Account(3, "A3", 30000),
+                new Account(4, "A4", 40000)
+            ]);
+
+            this.Count = ko.computed(function () {
+                return this.Accounts().length;
+            }, this);
+
+            this.SelectAccount = function (account) {
+                current.SelectedAccount(account);
+                alert(account.Name);
+            }
+
+            this.AmountToTransact = ko.observable(0);
+
+            this.Deposit = function () {
+                //alert("Start deposit");
+                this.SelectedAccount().Balance(this.SelectedAccount().Balance() + Number(this.AmountToTransact()));
+                //alert("End deposit");
+            }
+
+            this.Withdraw = function (minAmount) {
+                if ((this.SelectedAccount().Balance() - this.AmountToTransact()) < minAmount) {
+                    alert("Insufficient Balance");
+                }
+                else {
+                    this.SelectedAccount().Balance(this.SelectedAccount().Balance() - Number(this.AmountToTransact()));
+                }
+            }
+
+            this.DeleteAccount = function (account) {
+                if (current.SelectedAccount() == account) {
+                    current.SelectedAccount(null);
+                }
+                current.Accounts.remove(account); 
+            }
+
+        };
+
+        ko.applyBindings(myAccountViewModel);
+
+    </script>
+
+</body>
+</html>

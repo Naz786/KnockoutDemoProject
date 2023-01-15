@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="C:\Users\nazaq\source\repos\Visual Studio 2022\KnockoutDemoProject\KnockoutDemoProject\jquery-3.6.1.min.js"></script>
+    <script src="C:\Users\nazaq\source\repos\Visual Studio 2022\KnockoutDemoProject\KnockoutDemoProject\knockout-3.5.1.js"></script>
+    <script src="C:\Users\nazaq\source\repos\Visual Studio 2022\KnockoutDemoProject\KnockoutDemoProject\knockout.mapping-latest.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $("#btnConvertToJS").click(function () {
+                var acc = myAccountViewModel.Accounts()[0];
+                var accJS = ko.toJS(acc);
+                alert(accJS.Id + " " + accJS.Name + " " + accJS.Balance);
+            })
+
+            $("#btnConvertToJSON").click(function () {
+                var acc = myAccountViewModel.Accounts();
+                var accJSONString = ko.toJSON(acc);
+                var accJSON = JSON.parse(accJSONString);
+                //alert(accJSON.Id + " " + accJSON.Name + " " + accJSON.Balance);
+                alert(accJSONString);
+            })
+
+            $("#btnConvertFromJS").click(function () {
+                var acc = {Id:100, Name:'A100',Balance:10000};
+                var accViewModel = ko.mapping.fromJS(acc);
+                alert(accViewModel.Id() + ' ' + accViewModel.Name() + ' ' + accViewModel.Balance());
+            })
+
+            $("#btnConvertFromJSON").click(function () {
+                var acc = '{ "Id": "100", "Name": "A100", "Balance": "10000" }';
+                var accViewModel = ko.mapping.fromJSON(acc);
+                alert(accViewModel.Id() + ' ' + accViewModel.Name() + ' ' + accViewModel.Balance());
+            })
+        });
+    </script>
+
+</head>
+<body>
+
+    <table data-bind="foreach:Accounts">
+        <tr data-bind="displayStatus:Status, colors:['red', 'green']">
+            <td data-bind="text:Id"></td>
+            <td data-bind="text:Name"></td>
+            <td data-bind="text:Balance"></td>
+            <td><select data-bind="options:$parent.AllStatus, value:Status"></select></td>
+        </tr>
+    </table>
+    <button id="btnConvertToJS">Convert To JS</button>
+    <button id="btnConvertToJSON">Convert To JSON</button>
+    <button id="btnConvertFromJS">Convert From JS</button>
+    <button id="btnConvertFromJSON">Convert From JSON</button>
+    <pre data-bind="text:ko.toJSON($root, null, 2)"></pre>
+
+    <script>
+        function Account(id, name, balance, status) {
+            this.Id = ko.observable(id);
+            this.Name = ko.observable(name);
+            this.Balance = ko.observable(balance);
+            this.Status = ko.observable(status);
+        }
+
+        var myAccountViewModel = new function () {
+
+            this.AllStatus = ['Active', 'Inactive', 'Closed'];
+            this.Accounts = ko.observableArray([
+                new Account(1, "A1", 1000, 'Active'),
+                new Account(2, "A2", 20000, 'Inactive'),
+                new Account(3, "A3", 300, 'Closed'),
+                new Account(4, "A4", 40000, 'Active'),
+                new Account(5, "A5", 45000, 'Inactive'),
+                new Account(6, "A6", 7000, 'Closed'),
+                new Account(7, "A7", 1005000, 'Active')
+            ]);
+
+        };
+
+        ko.bindingHandlers.displayStatus = {
+            init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                //alert('init'); //only runs once
+            },
+            update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                //alert('update'); // runs the first time and on every subsequent change/update
+
+                var value = ko.unwrap(valueAccessor());
+
+                var activeColor = 'green';
+                var inactiveColor = 'red';
+
+                if (allBindings.has('colors')) {
+                    var colors = allBindings.get('colors');
+                    activeColor = colors[1];
+                    inactiveColor = colors[0];
+                }
+
+                switch (value.toLowerCase()) {
+                    case "inactive":
+                        element.style['color'] = inactiveColor
+                        element.style['text-decoration'] = 'none'
+                        break;
+                    case "active":
+                        element.style['color'] = activeColor
+                        element.style['text-decoration'] = 'none'
+                        break;
+                    case "closed":
+                        element.style['color'] = 'black'
+                        element.style['text-decoration'] = 'line-through'
+                        break;
+                    default:
+                        throw "Invalid Status"
+                        break;
+                }
+            }
+        }
+
+        ko.applyBindings(myAccountViewModel);
+
+    </script>
+
+</body>
+</html>
