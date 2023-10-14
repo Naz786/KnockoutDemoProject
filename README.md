@@ -1,8 +1,8 @@
 # KnockoutDemoProject
 
 ## Some Useful Links for Learning Knockout:
-⋅⋅* [Introducing Knockout, a UI library for JavaScript.](https://blog.stevensanderson.com/2010/07/05/introducing-knockout-a-ui-library-for-javascript/)
-⋅⋅* [Editing a variable-length list, Knockout-style.](https://blog.stevensanderson.com/2010/07/12/editing-a-variable-length-list-knockout-style/)
+* [Introducing Knockout, a UI library for JavaScript.](https://blog.stevensanderson.com/2010/07/05/introducing-knockout-a-ui-library-for-javascript/)
+* [Editing a variable-length list, Knockout-style.](https://blog.stevensanderson.com/2010/07/12/editing-a-variable-length-list-knockout-style/)
 ⋅⋅* [Knockout.js 1.2.0 released.](https://blog.stevensanderson.com/2011/04/20/knockoutjs-120-released/)
 ⋅⋅* [Knockout 1.3.0 Beta Available.](https://blog.stevensanderson.com/2011/08/31/knockout-1-3-0-beta-available/)
 ⋅⋅* [Knockout 2.0.0 released.](https://blog.stevensanderson.com/2011/12/21/knockout-2-0-0-released/)
